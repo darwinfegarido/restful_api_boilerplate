@@ -1,10 +1,22 @@
 const User = require('../models/User')
+const bcrypt = require('bcryptjs')
 
 const auth = {
 
   //Registration Controller
-  register : async (req, res, next) => {
-      const newUser = new User(req.body)
+  register : async (req, res) => {
+
+      const salt = await bcrypt.genSalt(10)
+      const hashedPassword = await bcrypt.hash(req.body.password, salt)
+
+      const data = {
+        firstname:req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        password: hashedPassword,
+      }
+
+      const newUser = new User(data)
 
       try{
         const user = await newUser.save()
@@ -24,6 +36,11 @@ const auth = {
   //Login with token
   login : async (req, res) => {
     // This will response the session token
+    const user = res.userDetails
+
+    const validPass = await bcrypt.compare(req.body.password, user.password)
+    if(!validPass) return res.status(400).send({message: 'Invalid Credentials!!!'})
+
     res.status(200).send(res.userDetails)
 
   },
