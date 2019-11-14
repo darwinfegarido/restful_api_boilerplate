@@ -1,13 +1,17 @@
-const express = require('express')
-const routes = express.Router()
+const routes = require('express').Router()
+const fs = require('fs')
 
-const listOfRoutes = [
-  "authRoutes",
-  "users",
-  "analytics",
-  "redemption",
-  "dashboard",
-]
+
+const fileRoutes = fs.readdirSync('./src/routes')
+
+const listOfRoutes = []
+fileRoutes.forEach((routers) => {
+  let removeExtension = routers.split('.')[0]
+  if(removeExtension != 'index'){
+    listOfRoutes.push(removeExtension)
+  }
+})
+
 
 let _;
 

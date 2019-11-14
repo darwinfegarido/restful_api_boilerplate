@@ -4,7 +4,7 @@
   "description": "Restful API for youplay",
   "main": "index.js",
   "scripts": {
-    "start":"nodemon server.js",
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -14,6 +14,7 @@
     "nodemon": "^1.19.4"
   },
   "dependencies": {
+    "@hapi/joi": "^15.0.3",
     "express": "^4.17.1",
     "mongoose": "^5.7.10"
   }
