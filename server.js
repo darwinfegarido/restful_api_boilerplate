@@ -1,13 +1,16 @@
 require('dotenv').config()
 
-let express = require('express')
-let app = express()
-let mongoose = require('mongoose')
+const express = require('express')
+const app = express()
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+
 
 
 // .env file
 const PORT = process.env.PORT || 3000
 const MONGO_DB = process.env.MONGO_DB
+
 
 
 // Database connection
@@ -20,9 +23,10 @@ const db = mongoose.connection
 db.on('error', (error) => console.error(`Database not connected!!! Error : ${error}`))
 db.once('open', () => console.info('Database conneted!!!'))
 
-
 //Middleware
+app.use(bodyParser.json())
 app.use(express.json())
+
 
 
 // Middleware Routes

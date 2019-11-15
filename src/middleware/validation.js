@@ -7,35 +7,21 @@ const schema = {
 }
 
 
-const registerValidation = (req, res, next) => {
-
+const registerValidation = (data) => {
   const { error } = Joi.validate({
-    name:req.body.firstname,
-    email:req.body.email,
-    password:req.body.password
+    name:data.firstname,
+    email:data.email,
+    password:data.password
   }, schema)
-
-  if(error != null){
-    const err = error.details[0].message
-    return res.status(400).send({message:err})
-
-  }
-  next()
+  return (error != null) ? error.details[0].message : false
 }
 
-const loginValidation = (req, res, next) => {
-
+const loginValidation = (data) => {
   const { error } = Joi.validate({
-    email:req.body.email,
-    password:req.body.password
+    email:data.email,
+    password:data.password
   }, schema)
-
-  if(error != null){
-    const err = error.details[0].message
-    return res.status(400).send({message:err})
-
-  }
-  next()
+  return (error != null) ? error.details[0].message : false
 }
 
 

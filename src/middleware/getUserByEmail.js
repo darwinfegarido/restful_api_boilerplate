@@ -1,13 +1,8 @@
 const User = require('../models/User')
 
-async function getUserByEmail(req, res, next){
-  const email = req.body.email
+async function getUserByEmail(email){
   const userDetails = await User.findOne({email: email})
-  if(userDetails == null){
-    return res.status(401).send({message: "Invalid Credentials!!!"})
-  }
-  res.userDetails = userDetails
-  next();
+  return (userDetails != null) ? userDetails : false
 }
 
 module.exports = getUserByEmail
