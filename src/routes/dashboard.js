@@ -9,18 +9,18 @@ const dashboard = (routes) => {
   })
 
   //POST
-  routes.post('/dashboard', (req, res) => {
+  routes.post('/dashboard', [ auth ], (req, res) => {
     const id = req.body.id
     res.send({"message": `This is client id ${id}`})
   })
 
   //UPDATE
-  routes.patch('/dashboard', (req, res) => {
+  routes.patch('/dashboard', [ auth ], (req, res) => {
     res.send({"message":"this is update"})
   })
 
   //DELETE
-  routes.delete('/dashboard', (req, res) => {
+  routes.delete('/dashboard', [ auth ], (req, res) => {
     res.send({"message":"this is delete"})
   })
 }

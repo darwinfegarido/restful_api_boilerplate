@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const getUserByEmail = require('../middleware/getUserByEmail')
 const { loginValidation, registerValidation } = require('../middleware/validation')
-
+const { successResponse, errorResponse, customResponse } = require('../middleware/response')
 
 const auth = {
 
@@ -63,11 +63,9 @@ const auth = {
       password:req.body.password
     }
 
-    const response = {
-      status: 400,
-      message: null,
-      data: null
-    }
+    let message,
+        data = null,
+        status;
 
     try{
       //check the parameters if meet the requirements
@@ -92,25 +90,24 @@ const auth = {
       const token = await jwt.sign(storedData, process.env.SECRET_KEY)
       res.setHeader('Authorization', token)
 
-      response.status = 200
-      response.message = `Welcome ${user.firstname}`
-      response.data = token
+      status = 200
+      message = `Welcome ${user.firstname}`
+      data = token
 
-      res.status(200).send(response)
     }catch(err){
-      response.message = err.message
-
+      status = 400
+      message = err.message
     }
 
-    res.status(response.status).send(response)
-
+    res.status(status).send(customResponse(message, data, status))
 
   },
 
   /*** logout  and destroy the session ***/
   logout : (req, res) => {
     //This will destroy the token or session
-    res.send('Logout')
+    res.setHeader('Authorization', '')
+    res.status(200).send(successResponse('Logout'))
   },
 
 }

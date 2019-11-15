@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
+const { errorResponse, successResponse } = require('./response')
 
 const auth = async (req, res, next) => {
-
   try{
     const key = process.env.SECRET_KEY
     const token = req.headers.authorization
@@ -9,8 +9,9 @@ const auth = async (req, res, next) => {
     res.user = verify
     next()
   }catch(err){
-    res.status(400).send('Access Denied!!!')
+    return res.status(400).send(errorResponse("Access Denied!!!"))
   }
+
 
 }
 
