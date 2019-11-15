@@ -1,8 +1,11 @@
+const auth = require('../middleware/auth')
+
 const dashboard = (routes) => {
 
   //GET
-  routes.get('/dashboard', (req, res) => {
-    res.send({"message":"this is get"})
+  routes.get('/dashboard', [ auth ], (req, res) => {
+    const user = res.user
+    res.send({"message":`Welcome ${user.firstname}`})
   })
 
   //POST

@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const getUserByEmail = require('../middleware/getUserByEmail')
 const { loginValidation, registerValidation } = require('../middleware/validation')
@@ -62,6 +63,12 @@ const auth = {
       password:req.body.password
     }
 
+    const response = {
+      status: 400,
+      message: null,
+      data: null
+    }
+
     try{
       //check the parameters if meet the requirements
       const validate = await loginValidation(userCredentials)
@@ -72,12 +79,30 @@ const auth = {
 
       //compare the hashpassword
       const validPass = await bcrypt.compare(req.body.password, user.password)
-      if(!validPass) return res.status(400).send({message: 'Invalid Credentials!!!'})
+      if(!validPass) throw new Error('Invalid Credentials!!!')
 
-      res.status(200).send({message:`Welcome ${user.firstname}`})
+      const storedData = {
+        firstname:user.firstname,
+        lastname:user.lastname,
+        email:user.email,
+        role:0
+      }
+
+      //generate token
+      const token = await jwt.sign(storedData, process.env.SECRET_KEY)
+      res.setHeader('Authorization', token)
+
+      response.status = 200
+      response.message = `Welcome ${user.firstname}`
+      response.data = token
+
+      res.status(200).send(response)
     }catch(err){
-      res.status(400).send({ message: 'Invalid Credentials'})
+      response.message = err.message
+
     }
+
+    res.status(response.status).send(response)
 
 
   },
