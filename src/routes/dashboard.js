@@ -8,6 +8,7 @@ const dashboard = (routes) => {
     res.send({"message":`Welcome ${user.firstname}`})
   })
 
+
   //POST
   routes.post('/dashboard', [ auth ], (req, res) => {
     const id = req.body.id

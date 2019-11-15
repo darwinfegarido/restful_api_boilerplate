@@ -16,6 +16,10 @@ const auth = {
         email:req.body.email
       }
 
+      let message,
+          data=null,
+          status;
+
       try{
 
         //validate parameters
@@ -40,10 +44,17 @@ const auth = {
         //save the datas
         const newUser = new User(data)
         const user = await newUser.save()
-        res.status(201).send({message: "Registered!!!"})
+
+        message = 'Success'
+        status = 201
+
       }catch(err){
-        res.status(400).send({ message: err.message })
+        message = err.message
+        status = 400
       }
+
+      res.status(status).send(customResponse(message, data, status))
+
 
     },
 
@@ -74,6 +85,7 @@ const auth = {
 
       //get the user by email
       const user = await getUserByEmail(req.body.email)
+      if(!user) throw new Error('Invalid Credentials!!!')
 
       //compare the hashpassword
       const validPass = await bcrypt.compare(req.body.password, user.password)
@@ -91,7 +103,7 @@ const auth = {
       res.setHeader('Authorization', token)
 
       status = 200
-      message = `Welcome ${user.firstname}`
+      message = `Success`
       data = token
 
     }catch(err){
@@ -100,7 +112,6 @@ const auth = {
     }
 
     res.status(status).send(customResponse(message, data, status))
-
   },
 
   /*** logout  and destroy the session ***/

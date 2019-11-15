@@ -12,7 +12,7 @@ const auth = (routes) => {
   routes.post('/login', login)
 
   //Logout
-  routes.post('/logout', logout)
+  routes.get('/logout', logout)
 }
 
 module.exports = auth
