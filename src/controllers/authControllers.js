@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const getUserByEmail = require('../middleware/getUserByEmail')
-const { loginValidation, registerValidation } = require('../middleware/validation')
+const { loginValidation, registerValidation } = require('../middleware/validation/authValidation')
 const { successResponse, errorResponse, customResponse } = require('../middleware/response')
 
 const auth = {
@@ -52,7 +52,6 @@ const auth = {
         message = err.message
         status = 400
       }
-
       res.status(status).send(customResponse(message, data, status))
 
 
@@ -60,9 +59,27 @@ const auth = {
 
 
   /*** Get Token for login authentication ***/
-  getToken : (req, res) => {
+  verifyToken : (req, res) => {
     // create session token
-    res.send('get Token')
+    const token = req.body.token
+    console.log(req.body)
+    let message,
+        data = null,
+        status;
+
+    try{
+      const verify = jwt.verify(token, process.env.SECRET_KEY)
+      message = 'Token verified'
+      status = 200
+      data = 1
+    }catch(err){
+      message = err.message
+      status = 400
+      data = 0
+
+    }
+
+    res.status(status).send(customResponse(message, data, status))
   },
 
 
@@ -110,7 +127,7 @@ const auth = {
       status = 400
       message = err.message
     }
-
+    res.setHeader('Content-Type', "application/json")
     res.status(status).send(customResponse(message, data, status))
   },
 

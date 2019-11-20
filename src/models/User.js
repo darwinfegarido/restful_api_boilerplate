@@ -12,7 +12,8 @@ const userSchema = new Schema({
   status: { type: 'String', max:50, required: false },
   children: { type: 'String', max:255, required: false },
   education: { type: 'String', max:255, required: false },
-  location: { type: 'String', max:255, required: false },  
+  location: { type: 'String', max:255, required: false },
+  role: { type: 'String', default: 3, max:1, required: true },  
   dateJoin: { type: 'Date', default: Date.now, required: true },
   dateUpdate: { type: 'Date', default: Date.now, required: true },
 });

@@ -1,18 +1,18 @@
-const { register, getToken, login, logout } = require('../controllers')
+const { authControllers } = require('../controllers')
 
 const auth = (routes) => {
 
   //Registration
-  routes.post('/register',  register)
+  routes.post('/register',  authControllers.register)
 
   //Get Token
-  routes.get('/token', getToken)
+  routes.post('/verify', authControllers.verifyToken)
 
   //Login
-  routes.post('/login', login)
+  routes.post('/login', authControllers.login)
 
   //Logout
-  routes.get('/logout', logout)
+  routes.get('/logout', authControllers.logout)
 }
 
 module.exports = auth
