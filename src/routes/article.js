@@ -3,17 +3,17 @@ const { articleControllers } = require('../controllers')
 
 const article = (routes) => {
 
-  //GET
-  routes.get('/content/article', [ auth ], articleControllers.getArticle)
+  //GET One
+  routes.get('/content/article/:id', [ auth ], articleControllers.getArticle)
 
 
   //POST
   routes.post('/content/article', [ auth ], articleControllers.addArticle)
 
   //UPDATE
-  routes.patch('/content/article', [ auth ], articleControllers.updateArticle)
+  routes.patch('/content/article/:id', [ auth ], articleControllers.updateArticle)
 
   //DELETE
-  routes.delete('/content/article', [ auth ], articleControllers.deleteArticle)
+  routes.delete('/content/article/:id', [ auth ], articleControllers.deleteArticle)
 }
 module.exports = article

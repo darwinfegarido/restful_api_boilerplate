@@ -1,28 +1,29 @@
 const Joi = require('@hapi/joi')
 
+
+
 const schema = {
-  name:Joi.string().max(255),
-  email:Joi.string().max(255).required(),
-  password:Joi.string().min(8).required(),
+  title:Joi.string().required(),
+  summary: Joi.string().required(),
+  description: Joi.string().required(),
+  img_banner:Joi.string().required(),
+  reward:Joi.string().required(),
+  date_expiration: Joi.date().max(255),
 }
 
 
-const registerValidation = (data) => {
+const articleValidation = (data) => {
   const { error } = Joi.validate({
-    name:data.firstname,
-    email:data.email,
-    password:data.password
+    title: data.title,
+    summary: data.summary,
+    description: data.description,
+    img_banner: data.img_banner,
+    reward: data.reward,
+    date_expiration: data.date_expiration,
   }, schema)
   return (error != null) ? error.details[0].message : false
 }
 
-const loginValidation = (data) => {
-  const { error } = Joi.validate({
-    email:data.email,
-    password:data.password
-  }, schema)
-  return (error != null) ? error.details[0].message : false
-}
 
 
-module.exports = { loginValidation, registerValidation }
+module.exports = { articleValidation }
