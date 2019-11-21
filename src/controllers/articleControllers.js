@@ -5,7 +5,7 @@ const { articleValidation } = require('../middleware/validation/articleValidatio
 
 
 const article = {
-  
+
   getArticle: async (req, res) => {
     const id = req.params.id
     let status,
@@ -70,7 +70,22 @@ const article = {
   },
 
   deleteArticle: async (req, res) => {
-    res.status(200).send(successResponse(message='this is a message for delete article', data={"test":"test"}))
+    const id = req.params.id
+
+    let status,
+        message,
+        data;
+
+    try{
+      status = 200
+      message = `Deletion Success`
+      await Article.findByIdAndRemove({_id:id})
+      await Feed.deleteOne({foreign_key:id})
+    }catch(err){
+      status = 400
+      message = "Invalid Request!!!"
+    }
+    res.status(status).send(customResponse(message, data, status))
   },
 }
 
