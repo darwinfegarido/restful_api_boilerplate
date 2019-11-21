@@ -4,15 +4,10 @@ const auth = (routes) => {
 
   //Registration
   routes.post('/register',  authControllers.register)
+        .post('/verify', authControllers.verifyToken)
+        .post('/login', authControllers.login)
+        .get('/logout', authControllers.logout);
 
-  //Get Token
-  routes.post('/verify', authControllers.verifyToken)
-
-  //Login
-  routes.post('/login', authControllers.login)
-
-  //Logout
-  routes.get('/logout', authControllers.logout)
 }
 
 module.exports = auth

@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
+
+
 const articleSchema = new Schema({
   type: { type: 'String', max:255, required: true },
   status: { type: 'String', max:1, default:1, required: true },

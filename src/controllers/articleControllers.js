@@ -1,11 +1,13 @@
 const Article = require('../models/Article')
 const Feed = require('../models/Feed')
 const { successResponse, errorResponse, customResponse } = require('../middleware/response')
-const { articleValidation } = require('../middleware/validation/articleValidation');
+const articleValidation = require('../middleware/validation/articleValidation');
+const articleUpdateValidation = require('../middleware/validation/articleUpdateValidation');
 
 
 const article = {
 
+  //get one article by id
   getArticle: async (req, res) => {
     const id = req.params.id
     let status,
@@ -22,7 +24,7 @@ const article = {
     res.status(status).send(customResponse(message, data, status))
   },
 
-
+  // add article
   addArticle: async (req, res) => {
     const body = req.body
     body.type = 'Article'
@@ -65,10 +67,35 @@ const article = {
     res.status(status).send(customResponse(message=message, data=data, status=status))
   },
 
+  // update one article by id
   updateArticle: async (req, res) => {
-    res.status(200).send(successResponse(message='this is a message for update article', data={"test":"test"}))
+
+    const query = { _id: req.params.id }
+    const upsert = req.body
+
+    let status,
+        message,
+        data;
+
+    try{
+
+      const valid = articleUpdateValidation(upsert)
+      if(valid) throw new Error(valid)
+      upsert.date_updated = Date.now()
+
+      status = 200
+      message = "Update Success"
+      await Article.findOneAndUpdate(query, upsert, {upsert: true})
+
+    }catch(err){
+      status = 400
+      message = err.message
+    }
+
+    res.status(status).send(customResponse(message=message, data=query._id, status=status))
   },
 
+  // delete one article
   deleteArticle: async (req, res) => {
     const id = req.params.id
 

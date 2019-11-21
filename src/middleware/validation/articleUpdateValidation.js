@@ -3,16 +3,16 @@ const Joi = require('@hapi/joi')
 
 
 const schema = {
-  title:Joi.string().required(),
-  summary: Joi.string().required(),
-  description: Joi.string().required(),
-  img_banner:Joi.string().required(),
-  reward:Joi.string().required(),
+  title:Joi.string(),
+  summary: Joi.string(),
+  description: Joi.string(),
+  img_banner:Joi.string(),
+  reward:Joi.string(),
   date_expiration: Joi.date().max(255),
 }
 
 
-const articleValidation = (data) => {
+const articleUpdateValidation = (data) => {
   const { error } = Joi.validate({
     title: data.title,
     summary: data.summary,
@@ -26,4 +26,4 @@ const articleValidation = (data) => {
 
 
 
-module.exports = articleValidation
+module.exports = articleUpdateValidation
