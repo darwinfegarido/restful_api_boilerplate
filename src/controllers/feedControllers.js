@@ -13,7 +13,7 @@ const feed = {
     try{
       status = 200;
       message = "Success";
-      data = await Feed.find({}, {_id:0, __v:0}).sort({date_created:-1, _id:0});
+      data = await Feed.find({}, { _id:0, __v:0, date_expiration:0, date_created:0, date_updated:0 }).sort({date_created:-1, _id:0});
     }catch(err){
       status = 400
       message = err.message
