@@ -1,17 +1,39 @@
-require('dotenv').config()
-
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-
+const mysql = require('mysql')
+require('dotenv').config()
 
 
 // .env file
 const PORT = process.env.PORT || 3000
 const MONGO_DB = process.env.MONGO_DB
 
+// mysql DB
+
+const MYSQL_PORT = process.env.MYSQL_PORT
+const MYSQL_URL = process.env.MYSQL_URL
+const MYSQL_USERNAME = process.env.MYSQL_USERNAME
+const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD
+
+// MySql DB Connection
+const con = mysql.createConnection({
+  host: "localhost",
+  port: 3306,
+  user: "root",
+  password: "0919628939"
+})
+
+con.connect(e => {
+  if(e) console.log(e.message);
+  console.log('Connected!!')
+})
+
+
+// Global mysql connect
+global.mysql_connect = con
 
 
 // Database connection
@@ -26,8 +48,7 @@ db.once('open', () => console.info('Database conneted!!!'))
 
 //Middleware
 app.use(cors())
-app.use(bodyParser.json())
-app.use(express.json())
+app.use(express.json({type: () => true}))
 
 
 // Middleware Routes
@@ -37,7 +58,7 @@ app.use('/', routes)
 app.use((err, req, res, next) => {
   if(err){
     if(process.env.DEBUG === 'true'){
-      console.log(err)
+      console.error(err)
       //soon save the error on log file
     }
     res.status(404).json({
