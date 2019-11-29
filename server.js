@@ -19,6 +19,7 @@ const MYSQL_USERNAME = process.env.MYSQL_USERNAME
 const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD
 
 // MySql DB Connection
+// Refference https://www.w3schools.com/nodejs/nodejs_mysql_create_db.asp
 const con = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -27,13 +28,19 @@ const con = mysql.createConnection({
 })
 
 con.connect(e => {
-  if(e) console.log(e.message);
-  console.log('Connected!!')
+  if(e) console.log("MySQL Error => ", e.message);
+  console.log('Mysql Database Connected!!')
+  // con.query('SHOW DATABASES', (err, res) => {
+  //   if(err) console.log(err.message)
+  //   console.log(res)
+  // })
+
 })
 
 
 // Global mysql connect
 global.mysql_connect = con
+
 
 
 // Database connection
@@ -43,8 +50,8 @@ mongoose.connect(MONGO_DB, {
  })
 
 const db = mongoose.connection
-db.on('error', (error) => console.error(`Database not connected!!! Error : ${error}`))
-db.once('open', () => console.info('Database conneted!!!'))
+db.on('error', (error) => console.error(`Mongo DB not connected!!! Error : ${error}`))
+db.once('open', () => console.info('Mongo DB conneted!!!'))
 
 //Middleware
 app.use(cors())

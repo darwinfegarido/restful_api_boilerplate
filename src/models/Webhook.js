@@ -2,23 +2,18 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const webhookSchema = new Schema({
-  EventNamespace: { type: 'String' },
-  OriginalTimestamp: { type: 'String'  },
-  OriginalEventId: { type: 'String'  },
-  PayloadJSON: { type: 'String'  },
-  WriterEntity: { type: 'String'  },
-  EntityLineage: { type: 'String'  },
-  EventId: { type: 'String'  },
-  EventName: { type: 'String'  },
-  EntityType: { type: 'String'  },
-  EntityId: { type: 'String' },
-  SourceType: { type: 'String'  },
-  Source: { type: 'String'  },
-  Timestamp: { type: 'String'  },
-  History: { type: 'String'  },
-  CustomTags: { type: 'String'  },
-  Reserved: { type: 'String'  },
-  PlayFabEnvironment: { type: 'String'  }
+  CustomTags: { type: 'Map', of: 'String', default:null },
+  EntityId: { type: 'String', default:null },
+  EntityType: { type: 'String', default:null  },
+  EventId: { type: 'String', default:null  },
+  EventName: { type: 'String', default:null  },
+  EventNamespace: { type: 'String', default:null  },
+  History: { type: 'String', default:null  },
+  Reserved: { type: 'Map', of: 'String', default:null  },
+  Source: { type: 'String', default:null  },
+  SourceType: { type: 'String', default:null },
+  Timestamp: { type: 'String', default:null  },
+  OtherDetails: { type: "String", default:null }
 });
 
 module.exports = mongoose.model('Webhook', webhookSchema);

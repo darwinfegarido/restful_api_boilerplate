@@ -1,11 +1,4 @@
-// const Webhook = require('../models/Webhook')
-
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema;
-
-const webhookSchema = new Schema(global.schema);
-
-const Webhook = mongoose.model('Webhook', webhookSchema);
+const Webhook = require('../models/Webhook')
 
 const webhookControllers = {
   //{ type: 'String', default:null },
@@ -14,25 +7,41 @@ const webhookControllers = {
 
     try{
       const data = req.body[0]
-      const newData = {}
-      const keys = Object.keys(data).map((v) => {
-        newData[v] = (String(typeof(data[v])) == 'object') ? JSON.stringify(data[v]) : data[v]
-        return v
+
+      const headers = [
+        "CustomTags",
+        "EntityId",
+        "EntityType",
+        "EventId",
+        "EventName",
+        "EventNamespace",
+        "History",
+        "Reserved",
+        "Source",
+        "SourceType",
+        "Timestamp",
+      ]
+
+      const commonProperties = {}
+      const otherDetails = {}
+
+      Object.keys(data).map(e => {
+        var key = e
+        var value = data[e]
+
+        if(headers.indexOf(e) != -1){
+          commonProperties[key] = value
+        }else{
+          otherDetails[key] = value
+        }
       })
+      commonProperties['OtherDetails'] = JSON.stringify(otherDetails)
 
-      const dictSchema = {}
-
-      keys.forEach(e => {
-        dictSchema[e] = { type: 'String', default:null }
-      })
-
-      const webhookSchema = new Schema(dictSchema);
-      const Webhook = mongoose.model('Webhook', webhookSchema);
-
-      const saveData = new Webhook(newData)
+      const saveData = new Webhook(commonProperties)
       await saveData.save()
 
-      console.log(saveData)
+      console.log(`Data : ${commonProperties['EventName']} at ${commonProperties['Timestamp']}`)
+
     }catch(err){
       console.log(err.message)
     }
