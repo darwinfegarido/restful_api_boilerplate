@@ -21,10 +21,10 @@ const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD
 // MySql DB Connection
 // Refference https://www.w3schools.com/nodejs/nodejs_mysql_create_db.asp
 const con = mysql.createConnection({
-  host: "localhost",
-  port: 3306,
-  user: "root",
-  password: "0919628939"
+  host: MYSQL_URL,
+  port: MYSQL_PORT,
+  user: MYSQL_USERNAME,
+  password: MYSQL_PASSWORD
 })
 
 con.connect(e => {

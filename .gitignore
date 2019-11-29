@@ -2,3 +2,5 @@ node_modules
 .env
 .git
 .gitignore
+err.log
+out.log
