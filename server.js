@@ -1,9 +1,10 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
-const bodyParser = require('body-parser')
 const cors = require('cors')
 const mysql = require('mysql')
+const migrateSchema = require('./src/models/mysql_schema')
+const { db_query } = require('./src/middleware/database_connection')
 require('dotenv').config()
 
 
@@ -17,6 +18,8 @@ const MYSQL_PORT = process.env.MYSQL_PORT
 const MYSQL_URL = process.env.MYSQL_URL
 const MYSQL_USERNAME = process.env.MYSQL_USERNAME
 const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD
+const MYSQL_DATABASE = process.env.MYSQL_DATABASE
+
 
 // MySql DB Connection
 // Refference https://www.w3schools.com/nodejs/nodejs_mysql_create_db.asp
@@ -24,22 +27,18 @@ const con = mysql.createConnection({
   host: MYSQL_URL,
   port: MYSQL_PORT,
   user: MYSQL_USERNAME,
-  password: MYSQL_PASSWORD
+  password: MYSQL_PASSWORD,
+  database:MYSQL_DATABASE
 })
 
 con.connect(e => {
-  if(e) console.log("MySQL Error => ", e.message);
-  console.log('Mysql Database Connected!!')
-  // con.query('SHOW DATABASES', (err, res) => {
-  //   if(err) console.log(err.message)
-  //   console.log(res)
-  // })
-
+  (e) ? console.log(e) : console.log('Mysql DB connected')
 })
-
 
 // Global mysql connect
 global.mysql_connect = con
+migrateSchema()
+
 
 
 
@@ -51,7 +50,7 @@ mongoose.connect(MONGO_DB, {
 
 const db = mongoose.connection
 db.on('error', (error) => console.error(`Mongo DB not connected!!! Error : ${error}`))
-db.once('open', () => console.info('Mongo DB conneted!!!'))
+db.once('open', () => console.info('Mongo DB connected'))
 
 //Middleware
 app.use(cors())

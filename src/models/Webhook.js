@@ -18,7 +18,6 @@ const webhookSchema = new Schema({
 
 module.exports = mongoose.model('Webhook', webhookSchema);
 
-
 /***
 
 Name	Type	Description
