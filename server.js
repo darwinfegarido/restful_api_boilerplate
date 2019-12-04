@@ -4,9 +4,9 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const mysql = require('mysql')
 const migrateSchema = require('./src/models/mysql_schema')
-const { db_query } = require('./src/middleware/database_connection')
 require('dotenv').config()
 
+// LoginWithAndroidDeviceID  -> AddUsernamePasswordRequest -> AddOrUpdateContactEmail
 
 // .env file
 const PORT = process.env.PORT || 3000
@@ -37,7 +37,9 @@ con.connect(e => {
 
 // Global mysql connect
 global.mysql_connect = con
-migrateSchema()
+
+//Trigger the mysql schema
+// migrateSchema()
 
 
 

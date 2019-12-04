@@ -1,4 +1,5 @@
 const Webhook = require('../models/Webhook')
+const dataFiltering = require('./dataFiltering')
 
 const webhookControllers = {
   //{ type: 'String', default:null },
@@ -39,7 +40,8 @@ const webhookControllers = {
 
       const saveData = new Webhook(commonProperties)
       await saveData.save()
-
+      commonProperties['OtherDetails'] = otherDetails
+      dataFiltering(commonProperties)
       console.log(`Data : ${commonProperties['EventName']} at ${commonProperties['Timestamp']}`)
 
     }catch(err){
