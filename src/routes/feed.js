@@ -4,6 +4,6 @@ const { feedControllers } = require('../controllers')
 const feed = (routes) => {
 
   //GET All Feeds
-  routes.get('/feeds', [ auth ], feedControllers.getFeeds)
+  routes.get('/feeds', feedControllers.getFeeds)
 }
 module.exports = feed

@@ -3,6 +3,7 @@ const {
   playerLinkedAccount,
   playerLogin,
   updatePlayerEmail,
+  updateDisplayName,
   } = require('../middleware/playfab_events')
 
 const dateFormat = (date) => {
@@ -44,6 +45,10 @@ module.exports = (datas) => {
     case 'player_updated_contact_email':
       email = datas['OtherDetails']['NewEmailAddress']
       updatePlayerEmail(entity_id, email)
+      break
+    case 'player_displayname_changed':
+      displayName = datas['OtherDetails']['DisplayName']
+      updateDisplayName(entity_id, displayName)
       break
   }
 }

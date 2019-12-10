@@ -7,7 +7,8 @@ const webhookControllers = {
   hook: async (req, res) => {
 
     try{
-      const data = req.body[0]
+
+      const datas = req.body
 
       const headers = [
         "CustomTags",
@@ -23,26 +24,29 @@ const webhookControllers = {
         "Timestamp",
       ]
 
-      const commonProperties = {}
-      const otherDetails = {}
 
-      Object.keys(data).map(e => {
-        var key = e
-        var value = data[e]
+      datas.forEach(async (data) => {
+        const commonProperties = {}
+        const otherDetails = {}
 
-        if(headers.indexOf(e) != -1){
-          commonProperties[key] = value
-        }else{
-          otherDetails[key] = value
-        }
+        Object.keys(data).map(e => {
+          var key = e
+          var value = data[e]
+
+          if(headers.indexOf(e) != -1){
+            commonProperties[key] = value
+          }else{
+            otherDetails[key] = value
+          }
+        })
+        commonProperties['OtherDetails'] = JSON.stringify(otherDetails)
+        const saveData = new Webhook(commonProperties)
+        await saveData.save()
+        commonProperties['OtherDetails'] = otherDetails
+        dataFiltering(commonProperties)
+        // console.log(`Data : ${commonProperties['EventName']} at ${commonProperties['Timestamp']}`)
       })
-      commonProperties['OtherDetails'] = JSON.stringify(otherDetails)
 
-      const saveData = new Webhook(commonProperties)
-      await saveData.save()
-      commonProperties['OtherDetails'] = otherDetails
-      dataFiltering(commonProperties)
-      console.log(`Data : ${commonProperties['EventName']} at ${commonProperties['Timestamp']}`)
 
     }catch(err){
       console.log(err.message)
